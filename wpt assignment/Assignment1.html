@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log("Event created");
+            let arr = [];
+            for (let index = 0; index < 10; index++) {
+                let x = Math.floor(Math.random() * 100) + 1;
+                arr.push(x);
+                console.log(arr);
+            }
+            const t1 = document.querySelector("#t1");
+            t1.addEventListener('blur', () => {
+                console.log("blur event");
+                let element = document.querySelector("#t1").value;
+                //if present
+                /*1.	Enable the buttons
+                a.	Edit
+                b.	Delete
+                2.	Disable the button
+                a.	Add
+                b.	View all
+                c.	Show odd positions.
+                */
+                //isPresent this is method;
+                if (isPresent(element)) {
+                    document.querySelector("#edit").disabled = false;
+                    document.querySelector("#delete").disabled = false;
+                    document.querySelector("#add").disabled = true;
+                    document.querySelector("#viewall").disabled = true;
+                    document.querySelector("#oddposition").disabled = true;
+                } else {
+                    document.querySelector("#edit").disabled = true;
+                    document.querySelector("#delete").disabled = true;
+                    document.querySelector("#add").disabled = false;
+                    document.querySelector("#viewall").disabled = false;
+                    document.querySelector("#oddposition").disabled = false;
+                }
+            });
+            //add event
+
+            let add = document.querySelector("#add");
+            add.addEventListener('click', () => {
+
+                arr.push(document.querySelector("#t1").value);
+                document.querySelector("#add").disabled = true;
+                document.querySelector("#msg").innerText = "Element added";
+            });
+            //view all
+            let view = document.querySelector("#viewall");
+            view.addEventListener('click', () => {
+                document.querySelector("#msg2").innerHTML = "present Element+" + arr.toString();
+            });
+            /*When delete button is clicked
+            i. Remove the number from the array.*/
+            let del = document.querySelector("#delete");
+            del.addEventListener('click', () => {
+                console.log("delete event");
+                let t1 = document.querySelector("#t1").value;
+                if (deleteElement(t1)) {
+                    document.querySelector("#delete").disabled = true;
+                    document.querySelector("#edit").disabled = true;
+                    document.querySelector("#msg").innerHTML = "Element deleted";
+                    document.querySelector("#msg2").innerHTML = 'number' + t1 + ' delete';
+
+                } else {
+                    document.querySelector("#delete").disabled = false;
+                    document.querySelector("#edit").disabled = false;
+                    document.querySelector("#msg").innerHTML = "Element not deleted";
+                    document.querySelector("#msg2").innerHTML = 'number not' + t1 + ' found';
+                }
+            });
+            // odd position
+            let odd = document.querySelector("#oddposition");
+            odd.addEventListener('click', () => {
+                console.log("odd event ");
+                let arr1 = oddposition();
+                document.querySelector("#msg2").innerHTML = 'odd position in list are' + arr1.toString();
+
+
+            });
+
+            let edit = document.querySelector("#edit");
+            edit.addEventListener('click', () => {
+                let original = document.querySelector('#t1').value;
+                let randomVal = Math.floor(Math.random() * 100) + 1;
+                let val = prompt("Enter the Value : " + "(Suggested Value " + randomVal + " )");
+                if (!checkNum(val)) {
+                    deleteElement(original);
+                    arr.push(val);
+                    document.querySelector("#changes").innerHTML = 'Element Updated';
+
+                    document.querySelector("#edit").disabled = true;
+                    document.querySelector("#delete").disabled = true;
+
+                    document.querySelector("#msg").
+                    innerHTML = 'Number ' + original + ' changed to ' + val;
+
+                } else {
+
+                    document.querySelector("#changes").innerHTML = 'Cannot Update Element';
+
+                    document.querySelector("#msg").innerHTML = 'Number ' + original + ' already present in the list';
+                }
+
+
+            });
+
+
+
+
+
+
+            function isPresent(element) {
+                for (let i = 0; i < arr.length; i++) {
+                    if (element == arr[i])
+                        return true;
+                }
+                return false;
+
+            };
+
+            function deleteElement(t1) {
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i] == t1) {
+                        arr.splice(i, 1);
+                        document.querySelector("#t1").value = " ";
+                        return true;
+                    }
+
+                }
+                return false;
+                console.log(arr);
+
+            }
+
+            function oddposition() {
+                let arr1 = [];
+                for (let i = 0; i < arr.length; i++) {
+                    if (i % 2 != 0) {
+                        arr1.push(arr[i]);
+                    }
+                }
+                return arr1;
+            }
+
+
+
+
+
+        });
+    </script>
+
+</head>
+
+<body>
+    <h1>Assignment1 </h1>
+    <input type="text" placeholder="Enter the number" id="t1"> <span id="msg">what happend</span> <br>
+    <button id="add" disabled>add</button>
+    <button id="edit" disabled>edit</button>
+    <button id="delete" disabled>delete</button>
+    <button id="viewall" disabled>view all</button>
+    <button id="oddposition" disabled>show odd position</button> <br>
+    <span id="msg2">data will be shown here</span>
+
+</body>
+
+</html>
